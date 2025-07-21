@@ -31,13 +31,17 @@ export async function POST(request: Request) {
     const refreshTokenDuration = process.env.REFRESH_TOKEN_DURATION ?? "1d";
 
     if (recoveredAddress.toLowerCase() === address.toLowerCase()) {
-      const accessToken = jwt.sign({ address }, process.env.JWT_SECRET, {
-        expiresIn: authTokenDuration,
-      });
+      const accessToken = jwt.sign(
+        { address },
+        process.env.JWT_SECRET as string,
+        {
+          expiresIn: authTokenDuration,
+        } as jwt.SignOptions,
+      );
       const refreshToken = jwt.sign(
         { address },
-        process.env.JWT_REFRESH_SECRET,
-        { expiresIn: refreshTokenDuration },
+        process.env.JWT_REFRESH_SECRET as string,
+        { expiresIn: refreshTokenDuration } as jwt.SignOptions,
       );
 
       await redis.set(

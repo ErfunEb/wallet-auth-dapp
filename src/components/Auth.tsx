@@ -62,9 +62,17 @@ const Auth = () => {
       } else {
         toast.error(responseData.message);
       }
-    } catch (error) {
-      console.log({ error });
-      toast.error(error.shortMessage);
+    } catch (error: unknown) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "shortMessage" in error &&
+        typeof (error as any).shortMessage === "string"
+      ) {
+        toast.error((error as any).shortMessage);
+      } else {
+        toast.error("An unknown error occurred");
+      }
     }
 
     setLoading(false);
