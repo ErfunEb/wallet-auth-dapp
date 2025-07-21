@@ -7,7 +7,10 @@ export async function GET() {
   const token = cookie.get("auth_token")?.value;
 
   try {
-    const decoded = jwt.verify(token!, process.env.JWT_SECRET!);
+    const decoded = jwt.verify(
+      token!,
+      process.env.JWT_SECRET!,
+    ) as jwt.JwtPayload;
     return NextResponse.json({ success: true, address: decoded.address });
   } catch {
     return NextResponse.json({ success: false }, { status: 401 });
